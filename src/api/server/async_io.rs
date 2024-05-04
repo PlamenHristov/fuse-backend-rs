@@ -116,8 +116,7 @@ impl<F: AsyncFileSystem + Sync> Server<F> {
     /// must ensure all data buffers managed by the `Reader` and `Writer` are valid until the
     /// `Future` object returned has completed. Other subsystems, such as the transport layer, rely
     /// on the invariant.
-    #[allow(unused_variables)]
-    pub async unsafe fn async_handle_message<S: BitmapSlice>(
+    pub async fn async_handle_message<S: BitmapSlice>(
         &self,
         mut r: Reader<'_, S>,
         w: Writer<'_, S>,
@@ -609,7 +608,6 @@ impl<'a, F: AsyncFileSystem, S: BitmapSlice> SrvContext<'a, F, S> {
     }
 }
 
-#[cfg(feature = "fusedev")]
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -631,7 +629,7 @@ mod tests {
             .into();
 
         let result = crate::async_runtime::block_on(async {
-            unsafe { server.async_handle_message(r, w, None, None).await }
+            server.async_handle_message(r, w, None, None).await
         });
         assert!(result.is_err());
     }
